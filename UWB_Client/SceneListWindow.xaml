@@ -1,0 +1,33 @@
+﻿<Window x:Class="UWB_Client.SceneListWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UWB_Client"
+        xmlns:models="clr-namespace:UWB_Client.Models" WindowStartupLocation="CenterOwner"
+        mc:Ignorable="d" WindowStyle="ToolWindow" x:Name="self"
+        Title="场景列表" Height="450" Width="800">
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="btn_ok" Style="{StaticResource DialogButton}" Content="确定" Click="btn_ok_Click"/>
+        </StackPanel>
+        <ListBox x:Name="lst" SelectedValue="{Binding ElementName=self,Path=SelectedScene}" MouseDoubleClick="lst_MouseDoubleClick">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="{x:Type models:SceneModel}">
+                    <Grid Height="55">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Name}" Grid.Column="0"></TextBlock>
+                        <TextBlock Text="{Binding X_Length}" Grid.Column="1"></TextBlock>
+                        <TextBlock Text="{Binding Y_Length}" Grid.Column="2"></TextBlock>
+                        <Image Source="{Binding MapThumbImage}" Grid.Column="3" Stretch="Fill"></Image>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </DockPanel>
+</Window>

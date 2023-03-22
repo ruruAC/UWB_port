@@ -1,0 +1,75 @@
+﻿<UserControl x:Class="UWB_Client.RegionListControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:UWB_Client"
+              xmlns:models="clr-namespace:UWB_Client.Models"
+             mc:Ignorable="d" 
+             x:Name="self"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <local:BoolToVisibilityConverter CollapseWhenInvisible="True" x:Key="_BoolToVisibilityConverter"/>
+    </UserControl.Resources>
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+            <Button x:Name="btn_expand_all" Content="全部[展开/折叠]" Click="btn_expand_all_Click"/>
+            <Button x:Name="btn_new" Content="新增" Click="btn_new_Click"/>
+        </StackPanel>
+
+        <Grid DockPanel.Dock="Bottom"  Height="50">
+            <Button x:Name="btn_save" Style="{StaticResource DialogButton}" Click="btn_save_Click">保存</Button>
+        </Grid>
+        <ItemsControl ItemsSource="{Binding ElementName=self,Path=Regions}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type models:RegionModel}">
+                    <Border BorderBrush="#FF1F41D6" >
+                        <Expander IsExpanded="{Binding IsFocused}">
+                            <Expander.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Name}"/>
+                                    <TextBlock>
+                                        <TextBlock.Inlines>
+                                            [
+                                            <Run Text="{Binding Sels.Count,Mode=OneWay}"/> ]
+                                        </TextBlock.Inlines>
+                                    </TextBlock>
+                                    <StackPanel Orientation="Horizontal" Visibility="{Binding IsFocused,Converter={StaticResource _BoolToVisibilityConverter}}">
+                                        <Button Content="新增选区" Tag="{Binding}" Click="btn_NewSel_Click"/>
+                                        <Button Content="编辑触发数据" Tag="{Binding}" Click="btn_edit_TriggerData_Click"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Expander.Header>
+                            <ListBox ItemsSource="{Binding Sels}" LostFocus="ListBox_LostFocus" SelectionChanged="ListBox_SelectionChanged">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type models:RectSel}">
+
+                                        <StackPanel x:Name="li" Orientation="Horizontal">
+
+                                            <StackPanel Visibility="{Binding IsSelected,Converter={StaticResource _BoolToVisibilityConverter}}">
+                                                <!--<Button x:Name="btn_delsel" Content="删除" Click="btn_delsel_Click" Tag="{Binding}"></Button>-->
+                                                <Button x:Name="btn_editsel" Content="编辑" Click="btn_editsel_Click" Tag="{Binding}"></Button>
+                                            </StackPanel>
+                                            <TextBlock Foreground="Red" Visibility="{Binding IsTrigger,Converter={StaticResource _BoolToVisibilityConverter}}" >*</TextBlock>
+                                            <TextBlock>
+                                                <TextBlock.Inlines>
+                                                    选区：[
+                                                    <Run Text="{Binding X,StringFormat={}{0:F2}}"/> ,
+                                                    <Run Text="{Binding Y,StringFormat={}{0:F2}}"/> ,
+                                                    <Run Text="{Binding Width,StringFormat={}{0:F2}}"/> ,
+                                                    <Run Text="{Binding Height,StringFormat={}{0:F2}}"/>
+                                                    ]
+
+                                                </TextBlock.Inlines>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Expander>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </DockPanel>
+</UserControl>
